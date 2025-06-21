@@ -6,7 +6,7 @@ Another task management app.
 
 - [x] Setup linter
 - [x] Setup tailwind
-- [ ] Home page
+- [x] Home page
 - [ ] Task table
 - [ ] Task table from store
 - [ ] Store task
