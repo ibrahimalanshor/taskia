@@ -4,7 +4,7 @@ Another task management app.
 
 ## Todo
 
-- [ ] Setup linter
+- [x] Setup linter
 - [ ] Setup tailwind
 - [ ] Home page
 - [ ] Task table
