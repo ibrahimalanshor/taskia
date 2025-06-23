@@ -3,32 +3,11 @@ import BaseContainer from './components/base/base-container.vue';
 import BaseHeading from './components/base/base-heading.vue';
 import BaseButton from './components/base/base-button.vue';
 import BaseTable from './components/base/base-table.vue';
-import { h } from 'vue';
+import BaseSelect from './components/base/base-select.vue';
+import { h, ref } from 'vue';
 import dayjs from 'dayjs';
 
-const columns = [
-  { id: 'name', name: 'Name' },
-  {
-    id: 'deadline',
-    name: 'Deadline',
-    value: (item) => dayjs(item.deadline).format('DD MMMM YYYY'),
-  },
-  {
-    id: 'status',
-    name: 'Status',
-    render: ({ item }) =>
-      h(
-        'select',
-        { value: item.status },
-        [
-          { id: 'todo', name: 'To Do' },
-          { id: 'progress', name: 'In Progress' },
-          { id: 'done', name: 'Done' },
-        ].map((option) => h('option', { value: option.id }, option.name)),
-      ),
-  },
-];
-const tasks = [
+const tasks = ref([
   {
     name: 'Setup linter',
     deadline: new Date(),
@@ -73,6 +52,29 @@ const tasks = [
     name: 'Update task status',
     deadline: new Date(),
     status: 'todo',
+  },
+]);
+
+const columns = [
+  { id: 'name', name: 'Name' },
+  {
+    id: 'deadline',
+    name: 'Deadline',
+    value: (item) => dayjs(item.deadline).format('DD MMMM YYYY'),
+  },
+  {
+    id: 'status',
+    name: 'Status',
+    render: ({ item, index }) =>
+      h(BaseSelect, {
+        options: [
+          { id: 'todo', name: 'To Do' },
+          { id: 'progress', name: 'In Progress' },
+          { id: 'done', name: 'Done' },
+        ],
+        modelValue: tasks.value[index].status,
+        'update:modelValue': (value) => (tasks.value[index].status = value),
+      }),
   },
 ];
 </script>
