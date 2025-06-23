@@ -8,8 +8,14 @@ Another task management app.
 - [x] Setup tailwind
 - [x] Home page
 - [x] Task table
-- [ ] Task table from store
-- [ ] Store task
-- [ ] Edit task
-- [ ] Delete task
-- [ ] Update task status
+- [x] Task status select
+- [ ] New Task
+- [ ] Edit Task
+- [ ] Delete Task
+
+## Feature Detail
+
+### New Task
+
+1. Click the "New Task" button
+2. Insert new rows with empty value at the bottom of the task table
