@@ -26,7 +26,7 @@ defineProps({
     </thead>
     <tbody>
       <tr
-        v-for="item in data"
+        v-for="(item, index) in data"
         :key="item.id"
       >
         <td
@@ -38,6 +38,7 @@ defineProps({
             :is="column.render"
             v-if="column.render"
             :item="item"
+            :index="index"
           />
           <template v-else-if="column.value">
             {{ column.value(item) }}
