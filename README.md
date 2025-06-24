@@ -18,4 +18,5 @@ Another task management app.
 ### New Task
 
 1. Click the "New Task" button
-2. Insert new rows with empty value at the bottom of the task table
+2. Insert new rows with cell input at the bottom of the task table
+3. Focus on input name in the new task cell
