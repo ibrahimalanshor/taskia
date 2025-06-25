@@ -5,9 +5,10 @@ import BaseButton from './components/base/base-button.vue';
 import BaseTable from './components/base/base-table.vue';
 import BaseSelect from './components/base/base-select.vue';
 import BaseInput from './components/base/base-input.vue';
-import { h, ref } from 'vue';
+import { h, nextTick, ref } from 'vue';
 import dayjs from 'dayjs';
 
+const taskNameInput = ref([]);
 const tasks = ref([
   {
     id: 'Setup linter',
@@ -72,7 +73,10 @@ const columns = [
     render: ({ item }) =>
       item.id
         ? h('p', item.name)
-        : h(BaseInput, { placeholder: 'Enter task name' }),
+        : h(BaseInput, {
+            ref: setTaskNameInputRef,
+            placeholder: 'Enter task name',
+          }),
   },
   {
     id: 'deadline',
@@ -98,13 +102,23 @@ const columns = [
   },
 ];
 
-function onNewTask() {
+function setTaskNameInputRef(el) {
+  taskNameInput.value.push(el);
+}
+
+async function onNewTask() {
+  const newIndex = tasks.value.filter((task) => !task.id).length;
+
   tasks.value.push({
     id: null,
     name: null,
     deadline: null,
     status: 'todo',
   });
+
+  await nextTick();
+
+  taskNameInput.value[newIndex].input.focus();
 }
 </script>
 
