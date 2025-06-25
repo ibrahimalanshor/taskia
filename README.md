@@ -20,3 +20,4 @@ Another task management app.
 1. Click the "New Task" button
 2. Insert new rows with cell input at the bottom of the task table
 3. Focus on input name in the new task cell
+4. In the action kolom there is save button to save the new task
