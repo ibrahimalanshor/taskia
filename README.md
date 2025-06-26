@@ -2,22 +2,18 @@
 
 Another task management app.
 
-## Todo
+## Features
 
-- [x] Setup linter
-- [x] Setup tailwind
-- [x] Home page
-- [x] Task table
-- [x] Task status select
+- [x] Task List
 - [ ] New Task
 - [ ] Edit Task
 - [ ] Delete Task
 
-## Feature Detail
+## Feature Details
 
 ### Task List
 
-1. Columns : name, deadline, status, action
+1. Table columns : name, deadline, status, action (edit, delete)
 2. Sort by deadline
 
 ### New Task
@@ -49,19 +45,19 @@ Another task management app.
 
 1. Dispatch API update task
 
-### New Task API Dispatch
+### Dispatch API New Task
 
 1. Accept data
 2. Request to server
 3. Get returned id
 4. Update the row id to returned id
 
-### Update Task API Dispatch
+### Dispatch API Update Task
 
 1. Accept id and data
 2. Request to server
 
-### Delete Task API Dispatch
+### API Dispatch Delete Task
 
 1. Accept id
 2. Request to server
