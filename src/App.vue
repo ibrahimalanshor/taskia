@@ -1,186 +1,79 @@
 <script setup>
+import BaseCard from './components/base/base-card.vue';
 import BaseContainer from './components/base/base-container.vue';
 import BaseHeading from './components/base/base-heading.vue';
 import BaseButton from './components/base/base-button.vue';
-import BaseTable from './components/base/base-table.vue';
-import BaseSelect from './components/base/base-select.vue';
 import BaseInput from './components/base/base-input.vue';
-import { computed, h, nextTick, ref } from 'vue';
-import dayjs from 'dayjs';
+import BaseSelect from './components/base/base-select.vue';
 
-const taskNameInput = ref({});
-const tasks = ref([
-  {
-    id: 'Setup linter',
-    name: 'Setup linter',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-  {
-    id: 'Setup tailwind',
-    name: 'Setup tailwind',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-  {
-    id: 'Home page',
-    name: 'Home page',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-  {
-    id: 'Task table',
-    name: 'Task table',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-  {
-    id: 'Task table from store',
-    name: 'Task table from store',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-  {
-    id: 'Store task',
-    name: 'Store task',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-  {
-    id: 'Edit task',
-    name: 'Edit task',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-  {
-    id: 'Delete task',
-    name: 'Delete task',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-  {
-    id: 'Update task status',
-    name: 'Update task status',
-    deadline: new Date(),
-    status: 'todo',
-    saved: true,
-  },
-]);
-
-const columns = [
-  {
-    id: 'name',
-    name: 'Name',
-    render: ({ item, index }) =>
-      item.saved
-        ? h('p', item.name)
-        : h(BaseInput, {
-            ref: (el) => setTaskNameInputRef(el, item.id),
-            placeholder: 'Enter task name',
-            modelValue: tasks.value[index].name,
-            'onUpdate:modelValue': (value) => (tasks.value[index].name = value),
-          }),
-  },
-  {
-    id: 'deadline',
-    name: 'Deadline',
-    render: ({ item, index }) =>
-      item.saved
-        ? h('p', dayjs(item.deadline).format('DD MMMM YYYY'))
-        : h(BaseInput, {
-            placeholder: 'Enter task name',
-            type: 'date',
-            modelValue: tasks.value[index].deadline,
-            'onUpdate:modelValue': (value) =>
-              (tasks.value[index].deadline = value),
-          }),
-  },
-  {
-    id: 'status',
-    name: 'Status',
-    render: ({ index }) =>
-      h(BaseSelect, {
-        options: [
-          { id: 'todo', name: 'To Do' },
-          { id: 'progress', name: 'In Progress' },
-          { id: 'done', name: 'Done' },
-        ],
-        modelValue: tasks.value[index].status,
-        'onUpdate:modelValue': (value) => (tasks.value[index].status = value),
-      }),
-  },
-  {
-    id: 'action',
-    name: 'Action',
-    render: ({ item, index }) =>
-      h(
-        'div',
-        { class: 'flex gap-1' },
-        !item.saved
-          ? [
-              h(
-                BaseButton,
-                { color: 'blue', size: 'sm', onClick: () => onSaveTask(index) },
-                () => 'Save',
-              ),
-              h(BaseButton, { size: 'sm' }, () => 'Cancel'),
-            ]
-          : [],
-      ),
-  },
+const tasks = [
+  'Vue Component v-model',
+  'v-model arguments Vue',
+  'Linux setup scrcpy',
 ];
-
-function setTaskNameInputRef(el, index) {
-  taskNameInput.value[index] = el;
-}
-
-async function onNewTask() {
-  const id = Date.now();
-
-  tasks.value.push({
-    id,
-    name: null,
-    deadline: null,
-    status: 'todo',
-    saved: false,
-  });
-
-  await nextTick();
-
-  taskNameInput.value[id].input.focus();
-}
-function onSaveTask(index) {
-  tasks.value[index].saved = true;
-}
 </script>
 
 <template>
-  <base-container class="py-10 space-y-4">
-    <base-heading
-      title="Task List"
-      :level="3"
-    >
-      <template #action>
-        <base-button
-          color="blue"
-          @click="onNewTask"
-        >
-          New Task
-        </base-button>
-      </template>
-    </base-heading>
+  <div class="bg-gray-100 min-h-screen">
+    <base-container class="py-10 space-y-4">
+      <base-heading
+        title="Task List"
+        :level="3"
+      />
 
-    <base-table
-      :columns="columns"
-      :data="tasks"
-    />
-  </base-container>
+      <base-card
+        title="Add New Task"
+        :striped="false"
+      >
+        <div class="flex gap-2">
+          <base-input
+            placeholder="Type task name"
+            fullwidth
+          />
+          <base-button color="blue">
+            Save
+          </base-button>
+        </div>
+      </base-card>
+
+      <base-card paddless>
+        <div class="divide-y divide-gray-300">
+          <div
+            v-for="task in tasks"
+            :key="task"
+            class="p-4"
+          >
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-medium text-gray-900">
+                  {{ task }}
+                </p>
+                <p class="text-sm text-gray-600">
+                  22 Mei 2025
+                </p>
+              </div>
+              <div class="flex gap-2">
+                <base-select
+                  size="sm"
+                  :options="[{ id: null, name: 'Todo' }]"
+                />
+                <base-button
+                  size="sm"
+                  color="blue"
+                >
+                  Edit
+                </base-button>
+                <base-button
+                  size="sm"
+                  color="red"
+                >
+                  Delete
+                </base-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </base-card>
+    </base-container>
+  </div>
 </template>
