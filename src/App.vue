@@ -15,7 +15,10 @@ const tasks = [
 
 <template>
   <div class="bg-gray-100 min-h-screen">
-    <base-container class="py-10 space-y-4">
+    <base-container
+      class="py-10 space-y-4"
+      max-screen="lg"
+    >
       <base-heading
         title="Task List"
         :level="3"
