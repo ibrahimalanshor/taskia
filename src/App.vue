@@ -12,6 +12,11 @@ const newTaskFrom = reactive({
   name: null,
   dueDate: null,
 });
+const editTaskId = ref(null);
+const editTask = reactive({
+  name: null,
+  dueDate: null,
+});
 
 const tasks = ref([
   { id: 1, name: 'Belajar JavaScript', dueDate: '2025-07-01', status: 'todo' },
@@ -72,6 +77,27 @@ function onSaveNewTask() {
   newTaskFrom.name = null;
   newTaskFrom.dueDate = null;
 }
+function onEditTask(task) {
+  editTaskId.value = task.id;
+  editTask.name = task.name;
+  editTask.dueDate = task.dueDate;
+}
+function onSaveEditTask() {
+  tasks.value = tasks.value.map((task) => {
+    if (task.id !== editTaskId.value) {
+      return task;
+    }
+
+    return {
+      id: task.id,
+      name: editTask.name,
+      dueDate: editTask.dueDate,
+      status: task.status,
+    };
+  });
+
+  editTaskId.value = null;
+}
 </script>
 
 <template>
@@ -121,7 +147,40 @@ function onSaveNewTask() {
             :key="task.id"
             class="p-4"
           >
-            <div class="flex items-center justify-between">
+            <form
+              v-if="editTaskId === task.id"
+              class="flex gap-2"
+              @submit.prevent="onSaveEditTask"
+            >
+              <base-input
+                v-model="editTask.name"
+                type="text"
+                placeholder="Edit task name"
+                fullwidth
+              />
+              <base-input
+                v-model="editTask.dueDate"
+                type="date"
+                fullwidth
+              />
+              <base-button
+                type="submit"
+                color="blue"
+                :disabled="!editTask.name || !editTask.dueDate"
+              >
+                Save
+              </base-button>
+              <base-button
+                type="button"
+                @click="editTaskId = null"
+              >
+                Cancel
+              </base-button>
+            </form>
+            <div
+              v-else
+              class="flex items-center justify-between"
+            >
               <div>
                 <p class="font-medium text-gray-900">
                   {{ task.name }}
@@ -143,6 +202,7 @@ function onSaveNewTask() {
                 <base-button
                   size="sm"
                   color="blue"
+                  @click="onEditTask(task)"
                 >
                   Edit
                 </base-button>

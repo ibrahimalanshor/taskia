@@ -13,6 +13,10 @@ const props = defineProps({
     default: 'md',
     validator: (value) => ['sm', 'md', 'lg'].includes(value),
   },
+  type: {
+    type: String,
+    default: 'button',
+  },
 });
 
 const color = computed(() => {
@@ -36,7 +40,7 @@ const size = computed(() => {
 
 <template>
   <button
-    type="button"
+    :type="type"
     :class="[
       color,
       size,
