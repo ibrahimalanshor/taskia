@@ -5,12 +5,25 @@ import BaseHeading from './components/base/base-heading.vue';
 import BaseButton from './components/base/base-button.vue';
 import BaseInput from './components/base/base-input.vue';
 import BaseSelect from './components/base/base-select.vue';
+import { reactive, ref } from 'vue';
 
-const tasks = [
+const newTaskFrom = reactive({
+  name: null,
+  dueDate: null,
+});
+
+const tasks = ref([
   'Vue Component v-model',
   'v-model arguments Vue',
   'Linux setup scrcpy',
-];
+]);
+
+function onSaveNewTask() {
+  tasks.value.push(newTaskFrom.name);
+
+  newTaskFrom.name = null;
+  newTaskFrom.dueDate = null;
+}
 </script>
 
 <template>
@@ -28,15 +41,29 @@ const tasks = [
         title="Add New Task"
         :striped="false"
       >
-        <div class="flex gap-2">
+        <form
+          class="flex gap-2"
+          @submit.prevent="onSaveNewTask"
+        >
           <base-input
+            v-model="newTaskFrom.name"
+            type="text"
             placeholder="Type task name"
             fullwidth
           />
-          <base-button color="blue">
+          <base-input
+            v-model="newTaskFrom.dueDate"
+            type="date"
+            fullwidth
+          />
+          <base-button
+            type="submit"
+            color="blue"
+            :disabled="!newTaskFrom.name || !newTaskFrom.dueDate"
+          >
             Save
           </base-button>
-        </div>
+        </form>
       </base-card>
 
       <base-card paddless>
