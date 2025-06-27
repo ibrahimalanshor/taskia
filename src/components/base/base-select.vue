@@ -17,7 +17,7 @@ const selected = defineModel();
 
 const size = computed(() => {
   return {
-    sm: 'h-8 text-sm px-3 pr-10',
+    sm: 'h-8 text-sm px-2 pr-10',
     md: 'h-10 px-2.5 pr-10',
     lg: 'h-12 text-lg px-4 pr-10',
   }[props.size || 'md'];

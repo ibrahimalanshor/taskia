@@ -6,6 +6,7 @@ import BaseButton from './components/base/base-button.vue';
 import BaseInput from './components/base/base-input.vue';
 import BaseSelect from './components/base/base-select.vue';
 import { reactive, ref } from 'vue';
+import dayjs from 'dayjs';
 
 const newTaskFrom = reactive({
   name: null,
@@ -13,13 +14,60 @@ const newTaskFrom = reactive({
 });
 
 const tasks = ref([
-  'Vue Component v-model',
-  'v-model arguments Vue',
-  'Linux setup scrcpy',
+  { id: 1, name: 'Belajar JavaScript', dueDate: '2025-07-01', status: 'todo' },
+  {
+    id: 2,
+    name: 'Baca dokumentasi Vue',
+    dueDate: '2025-07-02',
+    status: 'inprogress',
+  },
+  {
+    id: 3,
+    name: 'Push project ke GitHub',
+    dueDate: '2025-07-03',
+    status: 'done',
+  },
+  {
+    id: 4,
+    name: 'Desain UI halaman login',
+    dueDate: '2025-07-04',
+    status: 'todo',
+  },
+  {
+    id: 5,
+    name: 'Implementasi API login',
+    dueDate: '2025-07-05',
+    status: 'inprogress',
+  },
+  { id: 6, name: 'Testing login form', dueDate: '2025-07-06', status: 'todo' },
+  { id: 7, name: 'Deploy ke staging', dueDate: '2025-07-07', status: 'done' },
+  {
+    id: 8,
+    name: 'Fix bug validasi form',
+    dueDate: '2025-07-08',
+    status: 'inprogress',
+  },
+  {
+    id: 9,
+    name: 'Update dokumentasi project',
+    dueDate: '2025-07-09',
+    status: 'done',
+  },
+  {
+    id: 10,
+    name: 'Meeting review sprint',
+    dueDate: '2025-07-10',
+    status: 'todo',
+  },
 ]);
 
 function onSaveNewTask() {
-  tasks.value.push(newTaskFrom.name);
+  tasks.value.push({
+    id: tasks.value.length,
+    name: newTaskFrom.name,
+    dueDate: newTaskFrom.dueDate,
+    status: 'todo',
+  });
 
   newTaskFrom.name = null;
   newTaskFrom.dueDate = null;
@@ -69,23 +117,28 @@ function onSaveNewTask() {
       <base-card paddless>
         <div class="divide-y divide-gray-300">
           <div
-            v-for="task in tasks"
-            :key="task"
+            v-for="(task, index) in tasks"
+            :key="task.id"
             class="p-4"
           >
             <div class="flex items-center justify-between">
               <div>
                 <p class="font-medium text-gray-900">
-                  {{ task }}
+                  {{ task.name }}
                 </p>
                 <p class="text-sm text-gray-600">
-                  22 Mei 2025
+                  {{ dayjs(task.dueDate).format('DD MMMM YYYY') }}
                 </p>
               </div>
               <div class="flex gap-2">
                 <base-select
+                  v-model="tasks[index].status"
                   size="sm"
-                  :options="[{ id: null, name: 'Todo' }]"
+                  :options="[
+                    { id: 'todo', name: 'Todo' },
+                    { id: 'inprogress', name: 'In Progress' },
+                    { id: 'done', name: 'Done' },
+                  ]"
                 />
                 <base-button
                   size="sm"
