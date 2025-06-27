@@ -98,6 +98,13 @@ function onSaveEditTask() {
 
   editTaskId.value = null;
 }
+function onDeleteTask(deleteTask) {
+  tasks.value = tasks.value.filter((task) => {
+    return task.id !== deleteTask.id;
+  });
+
+  editTaskId.value = null;
+}
 </script>
 
 <template>
@@ -209,6 +216,7 @@ function onSaveEditTask() {
                 <base-button
                   size="sm"
                   color="red"
+                  @click="onDeleteTask(task)"
                 >
                   Delete
                 </base-button>
