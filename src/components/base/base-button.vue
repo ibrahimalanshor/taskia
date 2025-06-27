@@ -37,7 +37,11 @@ const size = computed(() => {
 <template>
   <button
     type="button"
-    :class="[color, size, 'rounded-md font-medium cursor-pointer']"
+    :class="[
+      color,
+      size,
+      'rounded-md font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed',
+    ]"
   >
     <slot />
   </button>
