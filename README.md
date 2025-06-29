@@ -9,5 +9,10 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Task with name
 - [x] Task list
 - [x] New task
-- [ ] Edit task name
-- [ ] Delete task
+- [x] Edit task name
+- [x] Delete task
+- [x] Loading tasks state
+- [x] Empty tasks state
+- [x] Error tasks state
+- [ ] Font
+- [ ] Responsive
