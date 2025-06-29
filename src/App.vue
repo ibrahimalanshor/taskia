@@ -126,7 +126,7 @@ function onDeleteTask(deleteTask) {
         :striped="false"
       >
         <form
-          class="flex gap-2"
+          class="flex flex-col gap-4 sm:flex-row sm:gap-2"
           @submit.prevent="onSaveNewTask"
         >
           <base-input
@@ -176,7 +176,7 @@ function onDeleteTask(deleteTask) {
             >
               <form
                 v-if="editTaskId === task.id"
-                class="flex gap-2"
+                class="flex flex-col gap-2 sm:flex-row"
                 @submit.prevent="onSaveEditTask"
               >
                 <base-input
@@ -190,23 +190,25 @@ function onDeleteTask(deleteTask) {
                   type="date"
                   fullwidth
                 />
-                <base-button
-                  type="submit"
-                  color="blue"
-                  :disabled="!editTask.name || !editTask.dueDate"
-                >
-                  Save
-                </base-button>
-                <base-button
-                  type="button"
-                  @click="editTaskId = null"
-                >
-                  Cancel
-                </base-button>
+                <div class="flex gap-2">
+                  <base-button
+                    type="submit"
+                    color="blue"
+                    :disabled="!editTask.name || !editTask.dueDate"
+                  >
+                    Save
+                  </base-button>
+                  <base-button
+                    type="button"
+                    @click="editTaskId = null"
+                  >
+                    Cancel
+                  </base-button>
+                </div>
               </form>
               <div
                 v-else
-                class="flex items-center justify-between"
+                class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
               >
                 <div>
                   <p class="font-medium text-gray-900">
@@ -216,7 +218,7 @@ function onDeleteTask(deleteTask) {
                     {{ dayjs(task.dueDate).format('DD MMMM YYYY') }}
                   </p>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex gap-2 justify-between sm:justify-start">
                   <base-select
                     v-model="tasks[index].status"
                     size="sm"
@@ -226,20 +228,22 @@ function onDeleteTask(deleteTask) {
                       { id: 'done', name: 'Done' },
                     ]"
                   />
-                  <base-button
-                    size="sm"
-                    color="blue"
-                    @click="onEditTask(task)"
-                  >
-                    Edit
-                  </base-button>
-                  <base-button
-                    size="sm"
-                    color="red"
-                    @click="onDeleteTask(task)"
-                  >
-                    Delete
-                  </base-button>
+                  <div class="flex gap-2">
+                    <base-button
+                      size="sm"
+                      color="blue"
+                      @click="onEditTask(task)"
+                    >
+                      Edit
+                    </base-button>
+                    <base-button
+                      size="sm"
+                      color="red"
+                      @click="onDeleteTask(task)"
+                    >
+                      Delete
+                    </base-button>
+                  </div>
                 </div>
               </div>
             </div>

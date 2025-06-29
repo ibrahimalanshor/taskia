@@ -14,5 +14,5 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Loading tasks state
 - [x] Empty tasks state
 - [x] Error tasks state
-- [ ] Font
-- [ ] Responsive
+- [x] Font
+- [x] Responsive
