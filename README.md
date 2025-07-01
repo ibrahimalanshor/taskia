@@ -16,3 +16,6 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Error tasks state
 - [x] Font
 - [x] Responsive
+- [ ] Navbar
+- [ ] Navbar Logout
+- [ ] Google Login Page
