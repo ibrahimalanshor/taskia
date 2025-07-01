@@ -111,6 +111,23 @@ function onDeleteTask(deleteTask) {
 </script>
 
 <template>
+  <nav
+    class="h-14 bg-white border-b border-gray-300 text-gray-900 flex items-center lg:h-16"
+  >
+    <base-container
+      max-screen="lg"
+      class="flex justify-between"
+    >
+      <a
+        href=""
+        class="text-gray-900 hover:underline"
+      >Home</a>
+      <a
+        href=""
+        class="text-gray-900 hover:underline"
+      >Logout</a>
+    </base-container>
+  </nav>
   <div class="bg-gray-100 min-h-screen">
     <base-container
       class="py-10 space-y-4"
