@@ -6,6 +6,7 @@ import BaseButton from './components/base/base-button.vue';
 import BaseInput from './components/base/base-input.vue';
 import BaseSelect from './components/base/base-select.vue';
 import BaseAlert from './components/base/base-alert.vue';
+import BaseConfirm from './components/base/base-confirm.vue';
 import { reactive, ref } from 'vue';
 import dayjs from 'dayjs';
 
@@ -20,6 +21,7 @@ const editTask = reactive({
 });
 const loadingTasks = ref(false);
 const errorTasks = ref(false);
+const visibleLogout = ref(false);
 
 const tasks = ref([
   { id: 1, name: 'Belajar JavaScript', dueDate: '2025-07-01', status: 'todo' },
@@ -116,16 +118,14 @@ function onDeleteTask(deleteTask) {
   >
     <base-container
       max-screen="lg"
-      class="flex justify-between"
+      class="flex items-center justify-end"
     >
-      <a
-        href=""
-        class="text-gray-900 hover:underline"
-      >Home</a>
-      <a
-        href=""
-        class="text-gray-900 hover:underline"
-      >Logout</a>
+      <base-button
+        color="transparent-gray"
+        @click="visibleLogout = true"
+      >
+        Logout
+      </base-button>
     </base-container>
   </nav>
   <div class="bg-gray-100 min-h-screen">
@@ -268,5 +268,12 @@ function onDeleteTask(deleteTask) {
         </base-card>
       </template>
     </base-container>
+
+    <base-confirm
+      v-model:visible="visibleLogout"
+      title="Are you sure want to logout?"
+      message="Confirm the button if you sure want to logout"
+      confirm-text="Logout"
+    />
   </div>
 </template>
