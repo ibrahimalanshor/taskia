@@ -26,6 +26,7 @@ const visible = defineModel('visible');
   >
     <component
       :is="withContainer ? BaseContainer : 'div'"
+      v-motion-slide-top
       :class="classes.container"
     >
       <base-card
