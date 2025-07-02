@@ -6,7 +6,15 @@ const props = defineProps({
     type: String,
     default: 'gray',
     validator: (value) =>
-      ['gray', 'blue', 'white', 'yellow', 'green', 'red'].includes(value),
+      [
+        'gray',
+        'blue',
+        'white',
+        'yellow',
+        'green',
+        'red',
+        'transparent-gray',
+      ].includes(value),
   },
   size: {
     type: String,
@@ -27,6 +35,8 @@ const color = computed(() => {
     yellow: 'bg-yellow-600 text-white hover:bg-yellow-700',
     green: 'bg-green-600 text-white hover:bg-green-700',
     red: 'bg-red-600 text-white hover:bg-red-700',
+    'transparent-gray':
+      'text-gray-900 hover:bg-gray-100 hover:border hover:border-gray-200',
   }[props.color || 'gray'];
 });
 const size = computed(() => {
