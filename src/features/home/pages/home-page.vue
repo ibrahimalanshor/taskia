@@ -138,148 +138,146 @@ onMounted(() => {
       </base-button>
     </template>
   </base-navbar>
-  <div class="bg-gray-100 min-h-screen">
-    <base-container
-      class="py-10 space-y-4"
-      max-screen="lg"
+  <base-container
+    class="py-10 space-y-4"
+    max-screen="lg"
+  >
+    <base-heading
+      title="Task List"
+      :level="3"
+    />
+
+    <base-card
+      title="Add New Task"
+      :striped="false"
     >
-      <base-heading
-        title="Task List"
-        :level="3"
-      />
-
-      <base-card
-        title="Add New Task"
-        :striped="false"
+      <form
+        class="flex flex-col gap-4 sm:flex-row sm:gap-2"
+        @submit.prevent="onSaveNewTask"
       >
-        <form
-          class="flex flex-col gap-4 sm:flex-row sm:gap-2"
-          @submit.prevent="onSaveNewTask"
+        <base-input
+          ref="new-task-name"
+          v-model="newTaskForm.name"
+          type="text"
+          placeholder="Type task name"
+          fullwidth
+        />
+        <base-input
+          v-model="newTaskForm.dueDate"
+          type="date"
+          fullwidth
+        />
+        <base-button
+          type="submit"
+          color="blue"
+          :disabled="!newTaskForm.name || !newTaskForm.dueDate"
         >
-          <base-input
-            ref="new-task-name"
-            v-model="newTaskForm.name"
-            type="text"
-            placeholder="Type task name"
-            fullwidth
-          />
-          <base-input
-            v-model="newTaskForm.dueDate"
-            type="date"
-            fullwidth
-          />
-          <base-button
-            type="submit"
-            color="blue"
-            :disabled="!newTaskForm.name || !newTaskForm.dueDate"
-          >
-            Save
-          </base-button>
-        </form>
-      </base-card>
+          Save
+        </base-button>
+      </form>
+    </base-card>
 
+    <base-alert
+      v-if="loadingTasks"
+      loading
+    >
+      Loading Tasks
+    </base-alert>
+
+    <template v-else>
       <base-alert
-        v-if="loadingTasks"
-        loading
+        v-if="errorTasks"
+        color="red"
       >
-        Loading Tasks
+        Error loading Tasks
       </base-alert>
-
-      <template v-else>
-        <base-alert
-          v-if="errorTasks"
-          color="red"
-        >
-          Error loading Tasks
-        </base-alert>
-        <base-list
-          v-else-if="tasks.length"
-          :data="tasks"
-        >
-          <template #item="{ item: task, index }">
-            <form
-              v-if="editTaskId === task.id"
-              class="flex flex-col gap-2 sm:flex-row"
-              @submit.prevent="onSaveEditTask"
-            >
-              <base-input
-                ref="edit-task-name"
-                v-model="editTask.name"
-                type="text"
-                placeholder="Edit task name"
-                fullwidth
-              />
-              <base-input
-                v-model="editTask.dueDate"
-                type="date"
-                fullwidth
+      <base-list
+        v-else-if="tasks.length"
+        :data="tasks"
+      >
+        <template #item="{ item: task, index }">
+          <form
+            v-if="editTaskId === task.id"
+            class="flex flex-col gap-2 sm:flex-row"
+            @submit.prevent="onSaveEditTask"
+          >
+            <base-input
+              ref="edit-task-name"
+              v-model="editTask.name"
+              type="text"
+              placeholder="Edit task name"
+              fullwidth
+            />
+            <base-input
+              v-model="editTask.dueDate"
+              type="date"
+              fullwidth
+            />
+            <div class="flex gap-2">
+              <base-button
+                type="submit"
+                color="blue"
+                :disabled="!editTask.name || !editTask.dueDate"
+              >
+                Save
+              </base-button>
+              <base-button
+                type="button"
+                @click="editTaskId = null"
+              >
+                Cancel
+              </base-button>
+            </div>
+          </form>
+          <div
+            v-else
+            class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
+          >
+            <div>
+              <p class="font-medium text-gray-900">
+                {{ task.name }}
+              </p>
+              <p class="text-sm text-gray-600">
+                {{ dayjs(task.dueDate).format('DD MMMM YYYY') }}
+              </p>
+            </div>
+            <div class="flex gap-2 justify-between sm:justify-start">
+              <base-select
+                v-model="tasks[index].status"
+                size="sm"
+                :options="[
+                  { id: 'todo', name: 'Todo' },
+                  { id: 'inprogress', name: 'In Progress' },
+                  { id: 'done', name: 'Done' },
+                ]"
               />
               <div class="flex gap-2">
                 <base-button
-                  type="submit"
+                  size="sm"
                   color="blue"
-                  :disabled="!editTask.name || !editTask.dueDate"
+                  @click="onEditTask(task)"
                 >
-                  Save
+                  Edit
                 </base-button>
                 <base-button
-                  type="button"
-                  @click="editTaskId = null"
+                  size="sm"
+                  color="red"
+                  @click="onDeleteTask(task)"
                 >
-                  Cancel
+                  Delete
                 </base-button>
               </div>
-            </form>
-            <div
-              v-else
-              class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
-            >
-              <div>
-                <p class="font-medium text-gray-900">
-                  {{ task.name }}
-                </p>
-                <p class="text-sm text-gray-600">
-                  {{ dayjs(task.dueDate).format('DD MMMM YYYY') }}
-                </p>
-              </div>
-              <div class="flex gap-2 justify-between sm:justify-start">
-                <base-select
-                  v-model="tasks[index].status"
-                  size="sm"
-                  :options="[
-                    { id: 'todo', name: 'Todo' },
-                    { id: 'inprogress', name: 'In Progress' },
-                    { id: 'done', name: 'Done' },
-                  ]"
-                />
-                <div class="flex gap-2">
-                  <base-button
-                    size="sm"
-                    color="blue"
-                    @click="onEditTask(task)"
-                  >
-                    Edit
-                  </base-button>
-                  <base-button
-                    size="sm"
-                    color="red"
-                    @click="onDeleteTask(task)"
-                  >
-                    Delete
-                  </base-button>
-                </div>
-              </div>
             </div>
-          </template>
-        </base-list>
-      </template>
-    </base-container>
+          </div>
+        </template>
+      </base-list>
+    </template>
+  </base-container>
 
-    <base-confirm
-      v-model:visible="visibleLogout"
-      title="Are you sure want to logout?"
-      message="Confirm the button if you sure want to logout"
-      confirm-text="Logout"
-    />
-  </div>
+  <base-confirm
+    v-model:visible="visibleLogout"
+    title="Are you sure want to logout?"
+    message="Confirm the button if you sure want to logout"
+    confirm-text="Logout"
+  />
 </template>
