@@ -7,6 +7,7 @@ import BaseInput from './components/base/base-input.vue';
 import BaseSelect from './components/base/base-select.vue';
 import BaseAlert from './components/base/base-alert.vue';
 import BaseConfirm from './components/base/base-confirm.vue';
+import BaseNavbar from './components/base/base-navbar.vue';
 import { reactive, ref } from 'vue';
 import dayjs from 'dayjs';
 
@@ -113,21 +114,19 @@ function onDeleteTask(deleteTask) {
 </script>
 
 <template>
-  <nav
-    class="h-14 bg-white border-b border-gray-300 text-gray-900 flex items-center lg:h-16"
-  >
-    <base-container
-      max-screen="lg"
-      class="flex items-center justify-end"
-    >
+  <base-navbar :container-props="{ maxScreen: 'lg' }">
+    <template #start>
+      <a href="">Home</a>
+    </template>
+    <template #end>
       <base-button
         color="transparent-gray"
         @click="visibleLogout = true"
       >
         Logout
       </base-button>
-    </base-container>
-  </nav>
+    </template>
+  </base-navbar>
   <div class="bg-gray-100 min-h-screen">
     <base-container
       class="py-10 space-y-4"
