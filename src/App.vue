@@ -8,6 +8,7 @@ import BaseSelect from './components/base/base-select.vue';
 import BaseAlert from './components/base/base-alert.vue';
 import BaseConfirm from './components/base/base-confirm.vue';
 import BaseNavbar from './components/base/base-navbar.vue';
+import BaseList from './components/base/base-list.vue';
 import { reactive, ref } from 'vue';
 import dayjs from 'dayjs';
 
@@ -180,91 +181,85 @@ function onDeleteTask(deleteTask) {
         >
           Error loading Tasks
         </base-alert>
-        <base-card
+        <base-list
           v-else-if="tasks.length"
-          paddless
+          :data="tasks"
         >
-          <div class="divide-y divide-gray-300">
-            <div
-              v-for="(task, index) in tasks"
-              :key="task.id"
-              class="p-4"
+          <template #item="{ item: task, index }">
+            <form
+              v-if="editTaskId === task.id"
+              class="flex flex-col gap-2 sm:flex-row"
+              @submit.prevent="onSaveEditTask"
             >
-              <form
-                v-if="editTaskId === task.id"
-                class="flex flex-col gap-2 sm:flex-row"
-                @submit.prevent="onSaveEditTask"
-              >
-                <base-input
-                  v-model="editTask.name"
-                  type="text"
-                  placeholder="Edit task name"
-                  fullwidth
-                />
-                <base-input
-                  v-model="editTask.dueDate"
-                  type="date"
-                  fullwidth
+              <base-input
+                v-model="editTask.name"
+                type="text"
+                placeholder="Edit task name"
+                fullwidth
+              />
+              <base-input
+                v-model="editTask.dueDate"
+                type="date"
+                fullwidth
+              />
+              <div class="flex gap-2">
+                <base-button
+                  type="submit"
+                  color="blue"
+                  :disabled="!editTask.name || !editTask.dueDate"
+                >
+                  Save
+                </base-button>
+                <base-button
+                  type="button"
+                  @click="editTaskId = null"
+                >
+                  Cancel
+                </base-button>
+              </div>
+            </form>
+            <div
+              v-else
+              class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
+            >
+              <div>
+                <p class="font-medium text-gray-900">
+                  {{ task.name }}
+                </p>
+                <p class="text-sm text-gray-600">
+                  {{ dayjs(task.dueDate).format('DD MMMM YYYY') }}
+                </p>
+              </div>
+              <div class="flex gap-2 justify-between sm:justify-start">
+                <base-select
+                  v-model="tasks[index].status"
+                  size="sm"
+                  :options="[
+                    { id: 'todo', name: 'Todo' },
+                    { id: 'inprogress', name: 'In Progress' },
+                    { id: 'done', name: 'Done' },
+                  ]"
                 />
                 <div class="flex gap-2">
                   <base-button
-                    type="submit"
+                    size="sm"
                     color="blue"
-                    :disabled="!editTask.name || !editTask.dueDate"
+                    @click="onEditTask(task)"
                   >
-                    Save
+                    Edit
                   </base-button>
                   <base-button
-                    type="button"
-                    @click="editTaskId = null"
-                  >
-                    Cancel
-                  </base-button>
-                </div>
-              </form>
-              <div
-                v-else
-                class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
-              >
-                <div>
-                  <p class="font-medium text-gray-900">
-                    {{ task.name }}
-                  </p>
-                  <p class="text-sm text-gray-600">
-                    {{ dayjs(task.dueDate).format('DD MMMM YYYY') }}
-                  </p>
-                </div>
-                <div class="flex gap-2 justify-between sm:justify-start">
-                  <base-select
-                    v-model="tasks[index].status"
                     size="sm"
-                    :options="[
-                      { id: 'todo', name: 'Todo' },
-                      { id: 'inprogress', name: 'In Progress' },
-                      { id: 'done', name: 'Done' },
-                    ]"
-                  />
-                  <div class="flex gap-2">
-                    <base-button
-                      size="sm"
-                      color="blue"
-                      @click="onEditTask(task)"
-                    >
-                      Edit
-                    </base-button>
-                    <base-button
-                      size="sm"
-                      color="red"
-                      @click="onDeleteTask(task)"
-                    >
-                      Delete
-                    </base-button>
-                  </div>
+                    color="red"
+                    @click="onDeleteTask(task)"
+                  >
+                    Delete
+                  </base-button>
                 </div>
               </div>
             </div>
-          </div>
-        </base-card>
+          </template>
+        </base-list>
       </template>
     </base-container>
 
