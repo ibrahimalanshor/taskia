@@ -17,5 +17,5 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Font
 - [x] Responsive
 - [x] Navbar
-- [ ] Navbar Logout
+- [x] Navbar Logout
 - [ ] Google Login Page
