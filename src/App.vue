@@ -9,18 +9,20 @@ import BaseAlert from './components/base/base-alert.vue';
 import BaseConfirm from './components/base/base-confirm.vue';
 import BaseNavbar from './components/base/base-navbar.vue';
 import BaseList from './components/base/base-list.vue';
-import { reactive, ref } from 'vue';
+import { nextTick, onMounted, reactive, ref, useTemplateRef } from 'vue';
 import dayjs from 'dayjs';
 
-const newTaskFrom = reactive({
+const newTaskForm = reactive({
   name: null,
   dueDate: null,
 });
+const newTaskNameInput = useTemplateRef('new-task-name');
 const editTaskId = ref(null);
 const editTask = reactive({
   name: null,
   dueDate: null,
 });
+const editTaskNameInput = useTemplateRef('edit-task-name');
 const loadingTasks = ref(false);
 const errorTasks = ref(false);
 const visibleLogout = ref(false);
@@ -76,18 +78,22 @@ const tasks = ref([
 function onSaveNewTask() {
   tasks.value.push({
     id: tasks.value.length,
-    name: newTaskFrom.name,
-    dueDate: newTaskFrom.dueDate,
+    name: newTaskForm.name,
+    dueDate: newTaskForm.dueDate,
     status: 'todo',
   });
 
-  newTaskFrom.name = null;
-  newTaskFrom.dueDate = null;
+  newTaskForm.name = null;
+  newTaskForm.dueDate = null;
 }
-function onEditTask(task) {
+async function onEditTask(task) {
   editTaskId.value = task.id;
   editTask.name = task.name;
   editTask.dueDate = task.dueDate;
+
+  await nextTick();
+
+  editTaskNameInput.value.input.focus();
 }
 function onSaveEditTask() {
   tasks.value = tasks.value.map((task) => {
@@ -112,6 +118,10 @@ function onDeleteTask(deleteTask) {
 
   editTaskId.value = null;
 }
+
+onMounted(() => {
+  newTaskNameInput.value.input.focus();
+});
 </script>
 
 <template>
@@ -147,20 +157,21 @@ function onDeleteTask(deleteTask) {
           @submit.prevent="onSaveNewTask"
         >
           <base-input
-            v-model="newTaskFrom.name"
+            ref="new-task-name"
+            v-model="newTaskForm.name"
             type="text"
             placeholder="Type task name"
             fullwidth
           />
           <base-input
-            v-model="newTaskFrom.dueDate"
+            v-model="newTaskForm.dueDate"
             type="date"
             fullwidth
           />
           <base-button
             type="submit"
             color="blue"
-            :disabled="!newTaskFrom.name || !newTaskFrom.dueDate"
+            :disabled="!newTaskForm.name || !newTaskForm.dueDate"
           >
             Save
           </base-button>
@@ -192,6 +203,7 @@ function onDeleteTask(deleteTask) {
               @submit.prevent="onSaveEditTask"
             >
               <base-input
+                ref="edit-task-name"
                 v-model="editTask.name"
                 type="text"
                 placeholder="Edit task name"
