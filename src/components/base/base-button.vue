@@ -1,4 +1,5 @@
 <script setup>
+import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -14,6 +15,7 @@ const props = defineProps({
         'green',
         'red',
         'transparent-gray',
+        'white-bordered',
       ].includes(value),
   },
   size: {
@@ -25,6 +27,8 @@ const props = defineProps({
     type: String,
     default: 'button',
   },
+  fullwidth: Boolean,
+  icon: String,
 });
 
 const color = computed(() => {
@@ -37,6 +41,8 @@ const color = computed(() => {
     red: 'bg-red-600 text-white hover:bg-red-700',
     'transparent-gray':
       'text-gray-900 hover:bg-gray-100 hover:border hover:border-gray-200',
+    'white-bordered':
+      'bg-white border border-gray-300 text-gray-900 hover:bg-gray-50',
   }[props.color || 'gray'];
 });
 const size = computed(() => {
@@ -54,9 +60,14 @@ const size = computed(() => {
     :class="[
       color,
       size,
-      'rounded-md font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed',
+      'rounded-md font-medium cursor-pointer inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed',
+      fullwidth ? 'w-full' : '',
     ]"
   >
+    <Icon
+      v-if="icon"
+      :icon="icon"
+    />
     <slot />
   </button>
 </template>
