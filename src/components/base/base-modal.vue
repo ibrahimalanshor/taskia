@@ -17,6 +17,10 @@ defineProps({
 });
 
 const visible = defineModel('visible');
+
+function onClose() {
+  visible.value = false;
+}
 </script>
 
 <template>
@@ -30,6 +34,7 @@ const visible = defineModel('visible');
       :class="classes.container"
     >
       <base-card
+        v-click-outside="onClose"
         :bordered="false"
         v-bind="cardProps"
       >
