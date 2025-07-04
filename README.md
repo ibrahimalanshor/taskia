@@ -18,4 +18,8 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Responsive
 - [x] Navbar
 - [x] Navbar Logout
-- [ ] Google Login Page
+- [x] Google Login Page
+- [ ] Auth store
+- [ ] Process google login
+- [ ] Guest guard
+- [ ] Page meta
