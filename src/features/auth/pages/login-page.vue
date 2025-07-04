@@ -2,6 +2,13 @@
 import BaseContainer from 'src/components/base/base-container.vue';
 import BaseCard from 'src/components/base/base-card.vue';
 import BaseButton from 'src/components/base/base-button.vue';
+import { googleAuthCodeLogin } from 'vue3-google-login';
+
+async function onGoogleLogin() {
+  const res = await googleAuthCodeLogin();
+
+  console.log(res);
+}
 </script>
 
 <template>
@@ -20,6 +27,7 @@ import BaseButton from 'src/components/base/base-button.vue';
             color="white-bordered"
             fullwidth
             icon="tabler:brand-google-filled"
+            @click="onGoogleLogin"
           >
             Login using Google
           </base-button>
