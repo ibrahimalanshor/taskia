@@ -5,6 +5,7 @@ import { MotionPlugin } from '@vueuse/motion';
 import vClickOutside from 'click-outside-vue3';
 import { router } from './router/router';
 import vue3GoogleLogin from 'vue3-google-login';
+import { createPinia } from 'pinia';
 
 const app = createApp(App);
 
@@ -14,5 +15,6 @@ app.use(router);
 app.use(vue3GoogleLogin, {
   clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
 });
+app.use(createPinia());
 
 app.mount('#app');
