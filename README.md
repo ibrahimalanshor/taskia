@@ -19,5 +19,8 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Navbar
 - [x] Navbar Logout
 - [x] Google Login Page
-- [ ] Google login get token
+- [x] Google login get token
+- [ ] Auth store
+- [x] Process google login
+- [ ] Guest guard
 - [ ] Page meta

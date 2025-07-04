@@ -1,4 +1,5 @@
 <script setup>
+import BaseSpinner from './base-spinner.vue';
 import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
 
@@ -29,6 +30,8 @@ const props = defineProps({
   },
   fullwidth: Boolean,
   icon: String,
+  loading: Boolean,
+  disabled: Boolean,
 });
 
 const color = computed(() => {
@@ -57,6 +60,7 @@ const size = computed(() => {
 <template>
   <button
     :type="type"
+    :disabled="disabled || loading"
     :class="[
       color,
       size,
@@ -64,8 +68,9 @@ const size = computed(() => {
       fullwidth ? 'w-full' : '',
     ]"
   >
+    <base-spinner v-if="loading" />
     <Icon
-      v-if="icon"
+      v-else-if="icon"
       :icon="icon"
     />
     <slot />

@@ -9,7 +9,9 @@ const props = defineProps({
     default: 'blue',
   },
   loading: Boolean,
+  withClose: Boolean,
 });
+const emit = defineEmits(['close']);
 
 const color = computed(() => {
   return {
@@ -32,16 +34,31 @@ const icon = computed(() => {
 </script>
 
 <template>
-  <div :class="['p-4 rounded-md border flex items-center gap-2', color]">
-    <base-spinner
-      v-if="loading"
-      :color="props.color"
-    />
-    <Icon
-      v-else
-      :icon="icon"
-      class="size-4"
-    />
-    <slot />
+  <div
+    :class="[
+      'p-4 rounded-md border flex items-start justify-between gap-2',
+      color,
+    ]"
+  >
+    <div class="flex items-start gap-2">
+      <base-spinner
+        v-if="loading"
+        class="mt-1"
+        :color="props.color"
+      />
+      <Icon
+        v-else
+        :icon="icon"
+        class="size-4 mt-1"
+      />
+      <slot />
+    </div>
+    <button
+      v-if="withClose"
+      class="mt-1 cursor-pointer"
+      @click="emit('close')"
+    >
+      <Icon icon="tabler:x" />
+    </button>
   </div>
 </template>
