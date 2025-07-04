@@ -4,6 +4,7 @@ export const homeRoutes = [
     name: 'home',
     meta: {
       auth: true,
+      title: 'Home',
     },
     component: () => import('./pages/home-page.vue'),
   },
