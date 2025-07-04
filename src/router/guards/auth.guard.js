@@ -1,7 +1,9 @@
-export function authGuard(to) {
-  const loggedIn = false;
+import { useAuthStore } from 'src/features/auth/auth.store';
 
-  if (to.matched.some((route) => route.meta.auth) && !loggedIn) {
+export function authGuard(to) {
+  const authStore = useAuthStore();
+
+  if (to.matched.some((route) => route.meta.auth) && !authStore.loggedIn) {
     return {
       name: 'login',
     };
