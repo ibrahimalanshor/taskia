@@ -45,14 +45,44 @@ async function loadTasks() {
 
   loadingTasks.value = false;
 }
+async function saveTask(id) {
+  const task = tasks.value.find((task) => task.id === id);
+
+  const [res, err] = await request({
+    url: '/tasks',
+    method: 'post',
+    data: {
+      name: task.name,
+      dueDate: task.dueDate,
+      status: task.status,
+    },
+  });
+
+  if (!err) {
+    tasks.value = tasks.value.map((task) => {
+      if (task.id !== id) {
+        return task;
+      }
+
+      return {
+        ...task,
+        id: res.data.id,
+      };
+    });
+  }
+}
 
 function onSaveNewTask() {
+  const id = tasks.value.length;
+
   tasks.value.push({
-    id: tasks.value.length,
+    id,
     name: newTaskForm.name,
     dueDate: newTaskForm.dueDate,
     status: 'todo',
   });
+
+  saveTask(id);
 
   newTaskForm.name = null;
   newTaskForm.dueDate = null;
