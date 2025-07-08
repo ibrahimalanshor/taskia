@@ -11,6 +11,7 @@ import BaseNavbar from 'src/components/base/base-navbar.vue';
 import BaseList from 'src/components/base/base-list.vue';
 import { nextTick, onMounted, reactive, ref, useTemplateRef } from 'vue';
 import dayjs from 'dayjs';
+import { request } from 'src/lib/http';
 
 const newTaskForm = reactive({
   name: null,
@@ -23,65 +24,84 @@ const editTask = reactive({
   dueDate: null,
 });
 const editTaskNameInput = useTemplateRef('edit-task-name');
-const loadingTasks = ref(false);
+const loadingTasks = ref(true);
 const errorTasks = ref(false);
 const visibleLogout = ref(false);
 
-const tasks = ref([
-  { id: 1, name: 'Belajar JavaScript', dueDate: '2025-07-01', status: 'todo' },
-  {
-    id: 2,
-    name: 'Baca dokumentasi Vue',
-    dueDate: '2025-07-02',
-    status: 'inprogress',
-  },
-  {
-    id: 3,
-    name: 'Push project ke GitHub',
-    dueDate: '2025-07-03',
-    status: 'done',
-  },
-  {
-    id: 4,
-    name: 'Desain UI halaman login',
-    dueDate: '2025-07-04',
-    status: 'todo',
-  },
-  {
-    id: 5,
-    name: 'Implementasi API login',
-    dueDate: '2025-07-05',
-    status: 'inprogress',
-  },
-  { id: 6, name: 'Testing login form', dueDate: '2025-07-06', status: 'todo' },
-  { id: 7, name: 'Deploy ke staging', dueDate: '2025-07-07', status: 'done' },
-  {
-    id: 8,
-    name: 'Fix bug validasi form',
-    dueDate: '2025-07-08',
-    status: 'inprogress',
-  },
-  {
-    id: 9,
-    name: 'Update dokumentasi project',
-    dueDate: '2025-07-09',
-    status: 'done',
-  },
-  {
-    id: 10,
-    name: 'Meeting review sprint',
-    dueDate: '2025-07-10',
-    status: 'todo',
-  },
-]);
+const tasks = ref([]);
+
+async function loadTasks() {
+  loadingTasks.value = true;
+
+  const [res, err] = await request({
+    url: `/tasks`,
+  });
+
+  if (err) {
+    errorTasks.value = true;
+  } else {
+    tasks.value = res;
+  }
+
+  loadingTasks.value = false;
+}
+async function saveTask(id) {
+  const task = tasks.value.find((task) => task.id === id);
+
+  const [res, err] = await request({
+    url: '/tasks',
+    method: 'post',
+    data: {
+      name: task.name,
+      dueDate: task.dueDate,
+      status: task.status,
+    },
+  });
+
+  if (!err) {
+    tasks.value = tasks.value.map((task) => {
+      if (task.id !== id) {
+        return task;
+      }
+
+      return {
+        ...task,
+        id: res.data.id,
+      };
+    });
+  }
+}
+async function updateTask(taskId) {
+  const task = tasks.value.find((task) => task.id === taskId);
+
+  await request({
+    url: `/tasks/${task.id}`,
+    method: 'put',
+    data: {
+      name: task.name,
+      dueDate: task.dueDate,
+      status: task.status,
+    },
+  });
+}
+async function removeTask(taskId) {
+  await request({
+    url: `/tasks/${taskId}`,
+    method: 'delete',
+  });
+}
 
 function onSaveNewTask() {
+  const id = tasks.value.length;
+
   tasks.value.push({
-    id: tasks.value.length,
+    id,
     name: newTaskForm.name,
     dueDate: newTaskForm.dueDate,
     status: 'todo',
   });
+
+  saveTask(id);
 
   newTaskForm.name = null;
   newTaskForm.dueDate = null;
@@ -109,6 +129,8 @@ function onSaveEditTask() {
     };
   });
 
+  updateTask(editTaskId.value);
+
   editTaskId.value = null;
 }
 function onDeleteTask(deleteTask) {
@@ -116,12 +138,14 @@ function onDeleteTask(deleteTask) {
     return task.id !== deleteTask.id;
   });
 
-  editTaskId.value = null;
+  removeTask(deleteTask.id);
 }
 
 onMounted(() => {
   newTaskNameInput.value.input.focus();
 });
+
+loadTasks();
 </script>
 
 <template>
@@ -250,6 +274,7 @@ onMounted(() => {
                   { id: 'inprogress', name: 'In Progress' },
                   { id: 'done', name: 'Done' },
                 ]"
+                @change="updateTask(task.id)"
               />
               <div class="flex gap-2">
                 <base-button

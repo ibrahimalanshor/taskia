@@ -8,7 +8,7 @@ export async function request(params) {
   try {
     const res = await http(params);
 
-    return [res, null];
+    return [res.data, null];
   } catch (err) {
     return [null, err];
   }

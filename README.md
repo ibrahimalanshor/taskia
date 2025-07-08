@@ -23,4 +23,8 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Auth store
 - [x] Process google login
 - [x] Guest guard
-- [ ] Page meta
+- [x] Page meta
+- [x] GET tasks on enter home
+- [x] POST tasks on create task
+- [x] PATCH tasks on update task
+- [x] DELETE tasks on delete task

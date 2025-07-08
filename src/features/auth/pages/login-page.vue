@@ -3,9 +3,14 @@ import BaseContainer from 'src/components/base/base-container.vue';
 import BaseCard from 'src/components/base/base-card.vue';
 import BaseButton from 'src/components/base/base-button.vue';
 import BaseAlert from 'src/components/base/base-alert.vue';
-// import { googleAuthCodeLogin } from 'vue3-google-login';
+import { googleAuthCodeLogin } from 'vue3-google-login';
 import { reactive, ref } from 'vue';
 import { request } from 'src/lib/http';
+import { useAuthStore } from 'src/features/auth/auth.store';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
+const router = useRouter();
 
 const loadingGoogleLogin = ref(false);
 const error = reactive({
@@ -13,20 +18,11 @@ const error = reactive({
   message: null,
 });
 
-function googleAuthCodeLogin() {
-  return Promise.resolve({
-    code: '4/0AVMBsJh1zF9KdqYosfE4EmIErIDUysCMeh098FeFjesWMF6RivRSdjzhJfiMct0U0JVuKg',
-    scope:
-      'email profile https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid',
-    authuser: '0',
-    prompt: 'consent',
-  });
-}
 async function onGoogleLogin() {
   loadingGoogleLogin.value = true;
 
   const googleInfo = await googleAuthCodeLogin();
-  const [, err] = await request({
+  const [res, err] = await request({
     url: '/login/google',
     method: 'post',
     data: {
@@ -37,6 +33,10 @@ async function onGoogleLogin() {
   if (err) {
     error.visible = true;
     error.message = err;
+  } else {
+    authStore.login();
+
+    router.push({ name: 'home' });
   }
 
   loadingGoogleLogin.value = false;
