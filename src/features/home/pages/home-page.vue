@@ -11,6 +11,7 @@ import BaseNavbar from 'src/components/base/base-navbar.vue';
 import BaseList from 'src/components/base/base-list.vue';
 import { nextTick, onMounted, reactive, ref, useTemplateRef } from 'vue';
 import dayjs from 'dayjs';
+import { request } from '../../../lib/http';
 
 const newTaskForm = reactive({
   name: null,
@@ -23,57 +24,27 @@ const editTask = reactive({
   dueDate: null,
 });
 const editTaskNameInput = useTemplateRef('edit-task-name');
-const loadingTasks = ref(false);
+const loadingTasks = ref(true);
 const errorTasks = ref(false);
 const visibleLogout = ref(false);
 
-const tasks = ref([
-  { id: 1, name: 'Belajar JavaScript', dueDate: '2025-07-01', status: 'todo' },
-  {
-    id: 2,
-    name: 'Baca dokumentasi Vue',
-    dueDate: '2025-07-02',
-    status: 'inprogress',
-  },
-  {
-    id: 3,
-    name: 'Push project ke GitHub',
-    dueDate: '2025-07-03',
-    status: 'done',
-  },
-  {
-    id: 4,
-    name: 'Desain UI halaman login',
-    dueDate: '2025-07-04',
-    status: 'todo',
-  },
-  {
-    id: 5,
-    name: 'Implementasi API login',
-    dueDate: '2025-07-05',
-    status: 'inprogress',
-  },
-  { id: 6, name: 'Testing login form', dueDate: '2025-07-06', status: 'todo' },
-  { id: 7, name: 'Deploy ke staging', dueDate: '2025-07-07', status: 'done' },
-  {
-    id: 8,
-    name: 'Fix bug validasi form',
-    dueDate: '2025-07-08',
-    status: 'inprogress',
-  },
-  {
-    id: 9,
-    name: 'Update dokumentasi project',
-    dueDate: '2025-07-09',
-    status: 'done',
-  },
-  {
-    id: 10,
-    name: 'Meeting review sprint',
-    dueDate: '2025-07-10',
-    status: 'todo',
-  },
-]);
+const tasks = ref([]);
+
+async function loadTasks() {
+  loadingTasks.value = true;
+
+  const [res, err] = await request({
+    url: `/tasks`,
+  });
+
+  if (err) {
+    errorTasks.value = true;
+  } else {
+    tasks.value = res;
+  }
+
+  loadingTasks.value = false;
+}
 
 function onSaveNewTask() {
   tasks.value.push({
@@ -122,6 +93,8 @@ function onDeleteTask(deleteTask) {
 onMounted(() => {
   newTaskNameInput.value.input.focus();
 });
+
+loadTasks();
 </script>
 
 <template>

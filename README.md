@@ -20,7 +20,11 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Navbar Logout
 - [x] Google Login Page
 - [x] Google login get token
-- [ ] Auth store
+- [x] Auth store
 - [x] Process google login
-- [ ] Guest guard
-- [ ] Page meta
+- [x] Guest guard
+- [x] Page meta
+- [ ] GET tasks on enter home
+- [ ] POST tasks on create task
+- [ ] PATCH tasks on update task
+- [ ] DELETE tasks on delete task
