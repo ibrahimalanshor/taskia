@@ -66,7 +66,7 @@ async function saveTask(id) {
 
       return {
         ...task,
-        id: res.data.id,
+        id: res.id,
       };
     });
   }
