@@ -71,7 +71,9 @@ async function saveTask(id) {
     });
   }
 }
-async function updateTask(task) {
+async function updateTask(taskId) {
+  const task = tasks.value.find((task) => task.id === taskId);
+
   await request({
     url: `/tasks/${task.id}`,
     method: 'put',
@@ -120,6 +122,8 @@ function onSaveEditTask() {
       status: task.status,
     };
   });
+
+  updateTask(editTaskId.value);
 
   editTaskId.value = null;
 }
@@ -264,7 +268,7 @@ loadTasks();
                   { id: 'inprogress', name: 'In Progress' },
                   { id: 'done', name: 'Done' },
                 ]"
-                @change="updateTask(task)"
+                @change="updateTask(task.id)"
               />
               <div class="flex gap-2">
                 <base-button
