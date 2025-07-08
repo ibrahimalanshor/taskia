@@ -71,6 +71,17 @@ async function saveTask(id) {
     });
   }
 }
+async function updateTask(task) {
+  await request({
+    url: `/tasks/${task.id}`,
+    method: 'put',
+    data: {
+      name: task.name,
+      dueDate: task.dueDate,
+      status: task.status,
+    },
+  });
+}
 
 function onSaveNewTask() {
   const id = tasks.value.length;
@@ -253,6 +264,7 @@ loadTasks();
                   { id: 'inprogress', name: 'In Progress' },
                   { id: 'done', name: 'Done' },
                 ]"
+                @change="updateTask(task)"
               />
               <div class="flex gap-2">
                 <base-button
