@@ -11,7 +11,7 @@ import BaseNavbar from 'src/components/base/base-navbar.vue';
 import BaseList from 'src/components/base/base-list.vue';
 import { nextTick, onMounted, reactive, ref, useTemplateRef } from 'vue';
 import dayjs from 'dayjs';
-import { request } from '../../../lib/http';
+import { request } from 'src/lib/http';
 
 const newTaskForm = reactive({
   name: null,

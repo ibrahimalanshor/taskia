@@ -24,7 +24,7 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Process google login
 - [x] Guest guard
 - [x] Page meta
-- [ ] GET tasks on enter home
-- [ ] POST tasks on create task
-- [ ] PATCH tasks on update task
-- [ ] DELETE tasks on delete task
+- [x] GET tasks on enter home
+- [x] POST tasks on create task
+- [x] PATCH tasks on update task
+- [x] DELETE tasks on delete task
