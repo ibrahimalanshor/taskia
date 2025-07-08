@@ -84,6 +84,12 @@ async function updateTask(taskId) {
     },
   });
 }
+async function removeTask(taskId) {
+  await request({
+    url: `/tasks/${taskId}`,
+    method: 'delete',
+  });
+}
 
 function onSaveNewTask() {
   const id = tasks.value.length;
@@ -132,7 +138,7 @@ function onDeleteTask(deleteTask) {
     return task.id !== deleteTask.id;
   });
 
-  editTaskId.value = null;
+  removeTask(deleteTask.id);
 }
 
 onMounted(() => {
