@@ -28,3 +28,5 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] POST tasks on create task
 - [x] PATCH tasks on update task
 - [x] DELETE tasks on delete task
+- [ ] Load me
+- [ ] Pagination
