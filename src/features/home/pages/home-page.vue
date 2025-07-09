@@ -27,8 +27,13 @@ const editTaskNameInput = useTemplateRef('edit-task-name');
 const loadingTasks = ref(true);
 const errorTasks = ref(false);
 const visibleLogout = ref(false);
-
 const tasks = ref([]);
+
+const selectColorByStatus = {
+  todo: 'white',
+  inprogress: 'blue-filled',
+  done: 'green-filled',
+};
 
 async function loadTasks() {
   loadingTasks.value = true;
@@ -274,6 +279,7 @@ loadTasks();
                   { id: 'inprogress', name: 'In Progress' },
                   { id: 'done', name: 'Done' },
                 ]"
+                :color="selectColorByStatus[task.status]"
                 @change="updateTask(task.id)"
               />
               <div class="flex gap-2">
