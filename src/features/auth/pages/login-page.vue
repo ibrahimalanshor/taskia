@@ -34,7 +34,7 @@ async function onGoogleLogin() {
     error.visible = true;
     error.message = err;
   } else {
-    authStore.login();
+    authStore.login(res.accessToken);
 
     router.push({ name: 'home' });
   }
