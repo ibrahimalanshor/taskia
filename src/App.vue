@@ -18,8 +18,8 @@ async function loadMe() {
   });
 
   if (err) {
-    // authStore.logout()
-    // router.push({ name: 'login' })
+    authStore.logout();
+    router.push({ name: 'login' });
   } else {
     // authStore.
   }
@@ -37,6 +37,8 @@ router.beforeEach((to) => {
 
 if (authStore.loggedIn) {
   loadMe();
+} else {
+  loadingMe.value = false;
 }
 </script>
 
