@@ -11,6 +11,19 @@ const props = defineProps({
     default: 'md',
     validator: (value) => ['sm', 'md', 'lg'].includes(value),
   },
+  color: {
+    type: String,
+    default: 'white',
+    validator: (value) =>
+      [
+        'gray-filled',
+        'blue-filled',
+        'white',
+        'yellow-filled',
+        'green-filled',
+        'red-filled',
+      ].includes(value),
+  },
 });
 
 const selected = defineModel();
@@ -22,6 +35,20 @@ const size = computed(() => {
     lg: 'h-12 text-lg px-4 pr-10',
   }[props.size || 'md'];
 });
+const color = computed(() => {
+  return {
+    'gray-filled':
+      'bg-gray-50 text-gray-700 border-gray-700 focus:outline-gray-600',
+    'blue-filled':
+      'bg-blue-50 text-blue-700 border-blue-700 focus:outline-blue-600',
+    white: 'bg-white text-gray-900 border-gray-300 focus:outline-blue-600',
+    'yellow-filled':
+      'bg-yellow-50 text-yellow-700 border-yellow-700 focus:outline-yellow-600',
+    'green-filled':
+      'bg-green-50 text-green-700 border-green-700 focus:outline-green-600',
+    'red-filled': 'bg-red-50 text-red-700 border-red-700 focus:outline-red-600',
+  }[props.color || 'white'];
+});
 const chevronSize = computed(() => {
   return {
     sm: 'size-3 absolute top-2.5 right-2',
@@ -29,16 +56,23 @@ const chevronSize = computed(() => {
     lg: 'size-4 absolute top-4 right-3',
   }[props.size || 'md'];
 });
+const chevronColor = computed(() => {
+  return {
+    'gray-filled': 'text-gray-700',
+    'blue-filled': 'text-blue-700',
+    white: 'text-gray-900',
+    'yellow-filled': 'text-yellow-700',
+    'green-filled': 'text-green-700',
+    'red-filled': 'text-red-700',
+  }[props.color || 'white'];
+});
 </script>
 
 <template>
   <div class="relative w-fit">
     <select
       v-model="selected"
-      :class="[
-        'border border-gray-300 rounded-md appearance-none text-gray-900 focus:outline-blue-600',
-        size,
-      ]"
+      :class="['border rounded-md appearance-none', size, color]"
     >
       <option
         v-for="option in options"
@@ -54,7 +88,7 @@ const chevronSize = computed(() => {
       viewBox="0 0 24 24"
       stroke-width="1.5"
       stroke="currentColor"
-      :class="chevronSize"
+      :class="[chevronSize, chevronColor]"
     >
       <path
         stroke-linecap="round"
