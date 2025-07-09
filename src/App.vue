@@ -1,7 +1,31 @@
 <script setup>
+import { Icon } from '@iconify/vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { request } from './lib/http';
+import { useAuthStore } from './features/auth/auth.store';
 
 const router = useRouter();
+const authStore = useAuthStore();
+
+const loadingMe = ref(true);
+
+async function loadMe() {
+  loadingMe.value = true;
+
+  const [res, err] = await request({
+    url: '/me',
+  });
+
+  if (err) {
+    // authStore.logout()
+    // router.push({ name: 'login' })
+  } else {
+    // authStore.
+  }
+
+  loadingMe.value = false;
+}
 
 router.beforeEach((to) => {
   if (to.meta.title) {
@@ -10,10 +34,24 @@ router.beforeEach((to) => {
     document.title = `${appName} - ${to.meta.title}`;
   }
 });
+
+if (authStore.loggedIn) {
+  loadMe();
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-100">
-    <router-view />
+    <div
+      v-if="loadingMe"
+      class="bg-white h-screen flex flex-col items-center justify-center gap-2 text-gray-900"
+    >
+      <Icon
+        icon="tabler:loader"
+        class="size-12 animate-spin"
+      />
+      <p>Getting things ready...</p>
+    </div>
+    <router-view v-else />
   </div>
 </template>
