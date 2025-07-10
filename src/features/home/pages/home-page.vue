@@ -188,7 +188,7 @@ loadTasks();
     max-screen="lg"
   >
     <base-heading
-      title="Task List"
+      title="Tasks for Today"
       :level="3"
     />
 
@@ -279,6 +279,7 @@ loadTasks();
                   { id: 'done', name: 'Done' },
                 ]"
                 :color="selectColorByStatus[task.status]"
+                debounced
                 @change="updateTask(task.id)"
               />
               <div class="flex gap-2">
