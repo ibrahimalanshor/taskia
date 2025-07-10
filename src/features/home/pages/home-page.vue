@@ -9,7 +9,14 @@ import BaseAlert from 'src/components/base/base-alert.vue';
 import BaseConfirm from 'src/components/base/base-confirm.vue';
 import BaseNavbar from 'src/components/base/base-navbar.vue';
 import BaseList from 'src/components/base/base-list.vue';
-import { nextTick, onMounted, reactive, ref, useTemplateRef } from 'vue';
+import {
+  computed,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  useTemplateRef,
+} from 'vue';
 import dayjs from 'dayjs';
 import { request } from 'src/lib/http';
 
@@ -28,6 +35,18 @@ const loadingTasks = ref(true);
 const errorTasks = ref(false);
 const visibleLogout = ref(false);
 const tasks = ref([]);
+
+const sortedTasks = computed(() =>
+  [...tasks.value].sort((a, b) => {
+    const weight = {
+      todo: 2,
+      inprogress: 1,
+      done: 3,
+    };
+
+    return weight[a.status] - weight[b.status];
+  }),
+);
 
 const selectColorByStatus = {
   todo: 'white',
@@ -97,7 +116,7 @@ async function removeTask(taskId) {
 }
 
 function onSaveNewTask() {
-  const id = tasks.value.length;
+  const id = Date.now();
 
   tasks.value.push({
     id,
@@ -222,9 +241,9 @@ loadTasks();
       </base-alert>
       <base-list
         v-else-if="tasks.length"
-        :data="tasks"
+        :data="sortedTasks"
       >
-        <template #item="{ item: task, index }">
+        <template #item="{ item: task }">
           <form
             v-if="editTaskId === task.id"
             class="flex flex-col gap-2 sm:flex-row"
@@ -272,7 +291,7 @@ loadTasks();
             </div>
             <div class="flex gap-2 justify-between sm:justify-start">
               <base-select
-                v-model="tasks[index].status"
+                v-model="task.status"
                 size="sm"
                 :options="[
                   { id: 'todo', name: 'Todo' },
