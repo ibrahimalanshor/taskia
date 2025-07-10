@@ -32,6 +32,7 @@ const props = defineProps({
   icon: String,
   loading: Boolean,
   disabled: Boolean,
+  iconOnly: Boolean,
 });
 
 const color = computed(() => {
@@ -50,9 +51,9 @@ const color = computed(() => {
 });
 const size = computed(() => {
   return {
-    sm: 'h-8 text-sm px-3',
-    md: 'h-10 px-4',
-    lg: 'h-12 text-lg px-5',
+    sm: ['h-8 text-sm', props.iconOnly ? 'w-8' : 'px-3'],
+    md: ['h-10', props.iconOnly ? 'w-10' : 'px-4'],
+    lg: ['h-12 text-lg', props.iconOnly ? 'w-12' : 'px-5'],
   }[props.size || 'md'];
 });
 </script>
