@@ -1,5 +1,4 @@
 <script setup>
-import BaseCard from 'src/components/base/base-card.vue';
 import BaseContainer from 'src/components/base/base-container.vue';
 import BaseHeading from 'src/components/base/base-heading.vue';
 import BaseButton from 'src/components/base/base-button.vue';
@@ -10,7 +9,6 @@ import BaseConfirm from 'src/components/base/base-confirm.vue';
 import BaseNavbar from 'src/components/base/base-navbar.vue';
 import BaseList from 'src/components/base/base-list.vue';
 import { computed, nextTick, reactive, ref, useTemplateRef } from 'vue';
-import dayjs from 'dayjs';
 import { request } from 'src/lib/http';
 
 const newTaskForm = reactive({
@@ -75,7 +73,6 @@ async function saveTask(id) {
     method: 'post',
     data: {
       name: task.name,
-      dueDate: task.dueDate,
       status: task.status,
     },
   });
@@ -105,7 +102,6 @@ async function updateTask(taskId) {
     method: 'put',
     data: {
       name: task.name,
-      dueDate: task.dueDate,
       status: task.status,
     },
   });
@@ -123,7 +119,6 @@ function onSaveNewTask() {
   tasks.value.push({
     id,
     name: newTaskForm.name,
-    dueDate: dayjs().format('YYYY-MM-DD'),
     status: 'todo',
   });
 
@@ -148,7 +143,6 @@ function onSaveEditTask() {
     return {
       id: task.id,
       name: editTask.name,
-      dueDate: task.dueDate,
       status: task.status,
     };
   });
@@ -253,7 +247,7 @@ loadTasks();
                 {{ task.name }}
               </p>
               <p class="text-sm text-gray-600">
-                {{ dayjs(task.dueDate).format('DD MMMM YYYY') }}
+                No Category
               </p>
             </div>
             <div class="flex gap-2 justify-between sm:justify-start">
