@@ -272,17 +272,17 @@ loadTasks();
                 <base-button
                   size="sm"
                   color="blue"
+                  icon="tabler:edit"
+                  icon-only
                   @click="onEditTask(task)"
-                >
-                  Edit
-                </base-button>
+                />
                 <base-button
                   size="sm"
                   color="red"
+                  icon="tabler:trash"
+                  icon-only
                   @click="onDeleteTask(task)"
-                >
-                  Delete
-                </base-button>
+                />
               </div>
             </div>
           </div>
