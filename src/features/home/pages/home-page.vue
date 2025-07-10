@@ -22,7 +22,6 @@ import { request } from 'src/lib/http';
 
 const newTaskForm = reactive({
   name: null,
-  dueDate: null,
 });
 const newTaskNameInput = useTemplateRef('new-task-name');
 const editTaskId = ref(null);
@@ -127,14 +126,13 @@ function onSaveNewTask() {
   tasks.value.push({
     id,
     name: newTaskForm.name,
-    dueDate: newTaskForm.dueDate,
+    dueDate: dayjs().format('YYYY-MM-DD'),
     status: 'todo',
   });
 
   saveTask(id);
 
   newTaskForm.name = null;
-  newTaskForm.dueDate = null;
 }
 async function onEditTask(task) {
   editTaskId.value = task.id;
@@ -216,18 +214,6 @@ loadTasks();
           placeholder="Type task name"
           fullwidth
         />
-        <base-input
-          v-model="newTaskForm.dueDate"
-          type="date"
-          fullwidth
-        />
-        <base-button
-          type="submit"
-          color="blue"
-          :disabled="!newTaskForm.name || !newTaskForm.dueDate"
-        >
-          Save
-        </base-button>
       </form>
     </base-card>
 
