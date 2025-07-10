@@ -52,10 +52,7 @@ async function loadTasks() {
   const [res, err] = await request({
     url: `/tasks`,
     params: {
-      filter: {
-        not_status: 'done',
-        dueDate: dayjs().format('YYYY-MM-DD'),
-      },
+      not_status: 'done',
     },
   });
 
