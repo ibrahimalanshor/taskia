@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { debounce } from 'src/utils/debounce';
 
 const props = defineProps({
   options: {
@@ -24,7 +25,9 @@ const props = defineProps({
         'red-filled',
       ].includes(value),
   },
+  debounced: Boolean,
 });
+const emit = defineEmits(['change']);
 
 const selected = defineModel();
 
@@ -66,6 +69,16 @@ const chevronColor = computed(() => {
     'red-filled': 'text-red-700',
   }[props.color || 'white'];
 });
+
+const debounceEmitChange = debounce(() => emit('change'), 500);
+
+function onChange() {
+  if (props.debounced) {
+    debounceEmitChange();
+  } else {
+    emit('change');
+  }
+}
 </script>
 
 <template>
@@ -73,6 +86,7 @@ const chevronColor = computed(() => {
     <select
       v-model="selected"
       :class="['border rounded-md appearance-none', size, color]"
+      @change="onChange"
     >
       <option
         v-for="option in options"
