@@ -31,6 +31,6 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Load me
 - [ ] All task page (table display)
 - [ ] Refresh Token
-- [ ] Debounce onchange select task status
-- [ ] Remove date in new task home and merge the card to the list
-- [ ] Home title change to today task
+- [x] Debounce onchange select task status
+- [x] Remove date in new task home and merge the card to the list
+- [x] Home title change to today task
