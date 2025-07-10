@@ -20,7 +20,6 @@ const newTaskNameInput = useTemplateRef('new-task-name');
 const editTaskId = ref(null);
 const editTask = reactive({
   name: null,
-  dueDate: null,
 });
 const editTaskNameInput = useTemplateRef('edit-task-name');
 const loadingTasks = ref(true);
@@ -131,7 +130,6 @@ function onSaveNewTask() {
 async function onEditTask(task) {
   editTaskId.value = task.id;
   editTask.name = task.name;
-  editTask.dueDate = task.dueDate;
 
   await nextTick();
 
@@ -146,7 +144,7 @@ function onSaveEditTask() {
     return {
       id: task.id,
       name: editTask.name,
-      dueDate: editTask.dueDate,
+      dueDate: task.dueDate,
       status: task.status,
     };
   });
@@ -233,19 +231,7 @@ loadTasks();
               placeholder="Edit task name"
               fullwidth
             />
-            <base-input
-              v-model="editTask.dueDate"
-              type="date"
-              fullwidth
-            />
             <div class="flex gap-2">
-              <base-button
-                type="submit"
-                color="blue"
-                :disabled="!editTask.name || !editTask.dueDate"
-              >
-                Save
-              </base-button>
               <base-button
                 type="button"
                 @click="editTaskId = null"
