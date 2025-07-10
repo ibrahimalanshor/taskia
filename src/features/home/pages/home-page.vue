@@ -96,6 +96,10 @@ async function saveTask(id) {
 async function updateTask(taskId) {
   const task = tasks.value.find((task) => task.id === taskId);
 
+  if (task.status === 'done') {
+    tasks.value = tasks.value.filter((task) => task.status !== 'done');
+  }
+
   await request({
     url: `/tasks/${task.id}`,
     method: 'put',
@@ -262,7 +266,6 @@ loadTasks();
                   { id: 'done', name: 'Done' },
                 ]"
                 :color="selectColorByStatus[task.status]"
-                debounced
                 @change="updateTask(task.id)"
               />
               <div class="flex gap-2">
