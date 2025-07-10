@@ -9,14 +9,7 @@ import BaseAlert from 'src/components/base/base-alert.vue';
 import BaseConfirm from 'src/components/base/base-confirm.vue';
 import BaseNavbar from 'src/components/base/base-navbar.vue';
 import BaseList from 'src/components/base/base-list.vue';
-import {
-  computed,
-  nextTick,
-  onMounted,
-  reactive,
-  ref,
-  useTemplateRef,
-} from 'vue';
+import { computed, nextTick, reactive, ref, useTemplateRef } from 'vue';
 import dayjs from 'dayjs';
 import { request } from 'src/lib/http';
 
@@ -73,6 +66,10 @@ async function loadTasks() {
   }
 
   loadingTasks.value = false;
+
+  await nextTick();
+
+  newTaskNameInput.value.input.focus();
 }
 async function saveTask(id) {
   const task = tasks.value.find((task) => task.id === id);
@@ -169,10 +166,6 @@ function onDeleteTask(deleteTask) {
   removeTask(deleteTask.id);
 }
 
-onMounted(() => {
-  newTaskNameInput.value.input.focus();
-});
-
 loadTasks();
 </script>
 
@@ -199,24 +192,6 @@ loadTasks();
       :level="3"
     />
 
-    <base-card
-      title="Add New Task"
-      :striped="false"
-    >
-      <form
-        class="flex flex-col gap-4 sm:flex-row sm:gap-2"
-        @submit.prevent="onSaveNewTask"
-      >
-        <base-input
-          ref="new-task-name"
-          v-model="newTaskForm.name"
-          type="text"
-          placeholder="Type task name"
-          fullwidth
-        />
-      </form>
-    </base-card>
-
     <base-alert
       v-if="loadingTasks"
       loading
@@ -231,10 +206,23 @@ loadTasks();
       >
         Error loading Tasks
       </base-alert>
-      <base-list
-        v-else-if="tasks.length"
-        :data="sortedTasks"
-      >
+      <base-list :data="sortedTasks">
+        <template #header="{ classes }">
+          <div :class="classes.item">
+            <form
+              class="flex flex-col gap-4 sm:flex-row sm:gap-2"
+              @submit.prevent="onSaveNewTask"
+            >
+              <base-input
+                ref="new-task-name"
+                v-model="newTaskForm.name"
+                type="text"
+                placeholder="What do you want to get done?"
+                fullwidth
+              />
+            </form>
+          </div>
+        </template>
         <template #item="{ item: task }">
           <form
             v-if="editTaskId === task.id"
