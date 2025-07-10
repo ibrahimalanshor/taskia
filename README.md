@@ -34,3 +34,5 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] Debounce onchange select task status
 - [x] Remove date in new task home and merge the card to the list
 - [x] Home title change to today task
+- [ ] Remove edit task date and save button in home
+- [ ] Use icon in edit and delete button task
