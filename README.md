@@ -28,5 +28,9 @@ Mockup : https://play.tailwindcss.com/Jaynb5yY8B
 - [x] POST tasks on create task
 - [x] PATCH tasks on update task
 - [x] DELETE tasks on delete task
-- [ ] Load me
-- [ ] Pagination
+- [x] Load me
+- [ ] All task page (table display)
+- [ ] Refresh Token
+- [ ] Debounce onchange select task status
+- [ ] Remove date in new task home and merge the card to the list
+- [ ] Home title change to today task
