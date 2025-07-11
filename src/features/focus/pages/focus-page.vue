@@ -6,8 +6,17 @@ import BaseSelect from 'src/components/base/base-select.vue';
 import BaseAlert from 'src/components/base/base-alert.vue';
 import BaseList from 'src/components/base/base-list.vue';
 import { computed, nextTick, reactive, ref, useTemplateRef } from 'vue';
-import { request } from 'src/lib/http';
+import { useTaskResource } from 'src/features/task/composables/task-resource';
 
+const {
+  loading: loadingTasks,
+  error: errorTasks,
+  tasks,
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+} = useTaskResource();
 const newTaskForm = reactive({
   name: null,
 });
@@ -17,9 +26,6 @@ const editTask = reactive({
   name: null,
 });
 const editTaskNameInput = useTemplateRef('edit-task-name');
-const loadingTasks = ref(true);
-const errorTasks = ref(false);
-const tasks = ref([]);
 
 const sortedTasks = computed(() =>
   [...tasks.value].sort((a, b) => {
@@ -40,37 +46,20 @@ const selectColorByStatus = {
 };
 
 async function loadTasks() {
-  loadingTasks.value = true;
-
-  const [res, err] = await request({
-    url: `/tasks`,
-    params: {
-      not_status: 'done',
-    },
+  await getTasks({
+    not_status: 'done',
   });
-
-  if (err) {
-    errorTasks.value = true;
-  } else {
-    tasks.value = res;
-  }
-
-  loadingTasks.value = false;
 
   await nextTick();
 
   newTaskNameInput.value.input.focus();
 }
-async function saveTask(id) {
+async function storeTask(id) {
   const task = tasks.value.find((task) => task.id === id);
 
-  const [res, err] = await request({
-    url: '/tasks',
-    method: 'post',
-    data: {
-      name: task.name,
-      status: task.status,
-    },
+  const [res, err] = await createTask({
+    name: task.name,
+    status: task.status,
   });
 
   if (!err) {
@@ -86,28 +75,6 @@ async function saveTask(id) {
     });
   }
 }
-async function updateTask(taskId) {
-  const task = tasks.value.find((task) => task.id === taskId);
-
-  if (task.status === 'done') {
-    tasks.value = tasks.value.filter((task) => task.status !== 'done');
-  }
-
-  await request({
-    url: `/tasks/${task.id}`,
-    method: 'put',
-    data: {
-      name: task.name,
-      status: task.status,
-    },
-  });
-}
-async function removeTask(taskId) {
-  await request({
-    url: `/tasks/${taskId}`,
-    method: 'delete',
-  });
-}
 
 function onSaveNewTask() {
   const id = Date.now();
@@ -118,7 +85,7 @@ function onSaveNewTask() {
     status: 'todo',
   });
 
-  saveTask(id);
+  storeTask(id);
 
   newTaskForm.name = null;
 }
@@ -131,6 +98,10 @@ async function onEditTask(task) {
   editTaskNameInput.value.input.focus();
 }
 function onSaveEditTask() {
+  const task = tasks.value.find((task) => task.id === editTaskId.value);
+
+  updateTask(task);
+
   tasks.value = tasks.value.map((task) => {
     if (task.id !== editTaskId.value) {
       return task;
@@ -143,16 +114,23 @@ function onSaveEditTask() {
     };
   });
 
-  updateTask(editTaskId.value);
-
   editTaskId.value = null;
 }
-function onDeleteTask(deleteTask) {
+function onChangeTaskStatus(taskId) {
+  const task = tasks.value.find((task) => task.id === taskId);
+
+  updateTask(task);
+
+  if (task.status === 'done') {
+    tasks.value = tasks.value.filter((task) => task.status !== 'done');
+  }
+}
+function onDeleteTask(deletingTask) {
   tasks.value = tasks.value.filter((task) => {
-    return task.id !== deleteTask.id;
+    return task.id !== deletingTask.id;
   });
 
-  removeTask(deleteTask.id);
+  deleteTask(deletingTask.id);
 }
 
 loadTasks();
@@ -239,7 +217,7 @@ loadTasks();
                 { id: 'done', name: 'Done' },
               ]"
               :color="selectColorByStatus[task.status]"
-              @change="updateTask(task.id)"
+              @change="onChangeTaskStatus(task.id)"
             />
             <div class="flex gap-2">
               <base-button
