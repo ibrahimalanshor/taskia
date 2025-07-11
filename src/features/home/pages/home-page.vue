@@ -1,12 +1,9 @@
 <script setup>
-import BaseContainer from 'src/components/base/base-container.vue';
 import BaseHeading from 'src/components/base/base-heading.vue';
 import BaseButton from 'src/components/base/base-button.vue';
 import BaseInput from 'src/components/base/base-input.vue';
 import BaseSelect from 'src/components/base/base-select.vue';
 import BaseAlert from 'src/components/base/base-alert.vue';
-import BaseConfirm from 'src/components/base/base-confirm.vue';
-import BaseNavbar from 'src/components/base/base-navbar.vue';
 import BaseList from 'src/components/base/base-list.vue';
 import { computed, nextTick, reactive, ref, useTemplateRef } from 'vue';
 import { request } from 'src/lib/http';
@@ -22,7 +19,6 @@ const editTask = reactive({
 const editTaskNameInput = useTemplateRef('edit-task-name');
 const loadingTasks = ref(true);
 const errorTasks = ref(false);
-const visibleLogout = ref(false);
 const tasks = ref([]);
 
 const sortedTasks = computed(() =>
@@ -163,132 +159,107 @@ loadTasks();
 </script>
 
 <template>
-  <base-navbar :container-props="{ maxScreen: 'lg' }">
-    <template #start>
-      <a href="">Home</a>
-    </template>
-    <template #end>
-      <base-button
-        color="transparent-gray"
-        @click="visibleLogout = true"
-      >
-        Logout
-      </base-button>
-    </template>
-  </base-navbar>
-  <base-container
-    class="py-10 space-y-4"
-    max-screen="lg"
+  <base-heading
+    title="Tasks to Focus On"
+    :level="3"
+  />
+
+  <base-alert
+    v-if="loadingTasks"
+    loading
   >
-    <base-heading
-      title="Tasks to Focus On"
-      :level="3"
-    />
+    Bringing Up Your Tasks
+  </base-alert>
 
+  <template v-else>
     <base-alert
-      v-if="loadingTasks"
-      loading
+      v-if="errorTasks"
+      color="red"
     >
-      Bringing Up Your Tasks
+      Something went wrong while loading tasks.
     </base-alert>
-
-    <template v-else>
-      <base-alert
-        v-if="errorTasks"
-        color="red"
-      >
-        Something went wrong while loading tasks.
-      </base-alert>
-      <base-list :data="sortedTasks">
-        <template #header="{ classes }">
-          <div :class="classes.item">
-            <form
-              class="flex flex-col gap-4 sm:flex-row sm:gap-2"
-              @submit.prevent="onSaveNewTask"
-            >
-              <base-input
-                ref="new-task-name"
-                v-model="newTaskForm.name"
-                type="text"
-                placeholder="What do you want to get done?"
-                fullwidth
-              />
-            </form>
-          </div>
-        </template>
-        <template #item="{ item: task }">
+    <base-list :data="sortedTasks">
+      <template #header="{ classes }">
+        <div :class="classes.item">
           <form
-            v-if="editTaskId === task.id"
-            class="flex flex-col gap-2 sm:flex-row"
-            @submit.prevent="onSaveEditTask"
+            class="flex flex-col gap-4 sm:flex-row sm:gap-2"
+            @submit.prevent="onSaveNewTask"
           >
             <base-input
-              ref="edit-task-name"
-              v-model="editTask.name"
+              ref="new-task-name"
+              v-model="newTaskForm.name"
               type="text"
-              placeholder="Edit task name"
+              placeholder="What do you want to get done?"
               fullwidth
+            />
+          </form>
+        </div>
+      </template>
+      <template #item="{ item: task }">
+        <form
+          v-if="editTaskId === task.id"
+          class="flex flex-col gap-2 sm:flex-row"
+          @submit.prevent="onSaveEditTask"
+        >
+          <base-input
+            ref="edit-task-name"
+            v-model="editTask.name"
+            type="text"
+            placeholder="Edit task name"
+            fullwidth
+          />
+          <div class="flex gap-2">
+            <base-button
+              type="button"
+              @click="editTaskId = null"
+            >
+              Cancel
+            </base-button>
+          </div>
+        </form>
+        <div
+          v-else
+          class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
+        >
+          <div>
+            <p class="font-medium text-gray-900">
+              {{ task.name }}
+            </p>
+            <p class="text-sm text-gray-600">
+              Uncategorized
+            </p>
+          </div>
+          <div class="flex gap-2 justify-between sm:justify-start">
+            <base-select
+              v-model="task.status"
+              size="sm"
+              :options="[
+                { id: 'todo', name: 'Todo' },
+                { id: 'inprogress', name: 'In Progress' },
+                { id: 'done', name: 'Done' },
+              ]"
+              :color="selectColorByStatus[task.status]"
+              @change="updateTask(task.id)"
             />
             <div class="flex gap-2">
               <base-button
-                type="button"
-                @click="editTaskId = null"
-              >
-                Cancel
-              </base-button>
-            </div>
-          </form>
-          <div
-            v-else
-            class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
-          >
-            <div>
-              <p class="font-medium text-gray-900">
-                {{ task.name }}
-              </p>
-              <p class="text-sm text-gray-600">
-                Uncategorized
-              </p>
-            </div>
-            <div class="flex gap-2 justify-between sm:justify-start">
-              <base-select
-                v-model="task.status"
                 size="sm"
-                :options="[
-                  { id: 'todo', name: 'Todo' },
-                  { id: 'inprogress', name: 'In Progress' },
-                  { id: 'done', name: 'Done' },
-                ]"
-                :color="selectColorByStatus[task.status]"
-                @change="updateTask(task.id)"
+                color="blue"
+                icon="tabler:edit"
+                icon-only
+                @click="onEditTask(task)"
               />
-              <div class="flex gap-2">
-                <base-button
-                  size="sm"
-                  color="blue"
-                  icon="tabler:edit"
-                  icon-only
-                  @click="onEditTask(task)"
-                />
-                <base-button
-                  size="sm"
-                  color="red"
-                  icon="tabler:trash"
-                  icon-only
-                  @click="onDeleteTask(task)"
-                />
-              </div>
+              <base-button
+                size="sm"
+                color="red"
+                icon="tabler:trash"
+                icon-only
+                @click="onDeleteTask(task)"
+              />
             </div>
           </div>
-        </template>
-      </base-list>
-    </template>
-  </base-container>
-
-  <base-confirm
-    v-model:visible="visibleLogout"
-    title="Are you sure want to logout?"
-    message="Confirm the button if you sure want to logout"
-    confirm-text="Logout"
-  />
+        </div>
+      </template>
+    </base-list>
+  </template>
 </template>

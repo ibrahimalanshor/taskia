@@ -5,6 +5,7 @@ export const homeRoutes = [
     meta: {
       auth: true,
       title: 'Home',
+      layout: 'layout-app',
     },
     component: () => import('./pages/home-page.vue'),
   },

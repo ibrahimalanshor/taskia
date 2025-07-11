@@ -1,11 +1,12 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { request } from './lib/http';
 import { useAuthStore } from './features/auth/auth.store';
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 
 const loadingMe = ref(true);
@@ -54,6 +55,11 @@ if (authStore.loggedIn) {
       />
       <p>Getting things ready...</p>
     </div>
-    <router-view v-else />
+    <component
+      :is="route.meta.layout || 'div'"
+      v-else
+    >
+      <router-view />
+    </component>
   </div>
 </template>
