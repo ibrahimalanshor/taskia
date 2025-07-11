@@ -247,7 +247,7 @@ loadTasks();
                 {{ task.name }}
               </p>
               <p class="text-sm text-gray-600">
-                No Category
+                Uncategorized
               </p>
             </div>
             <div class="flex gap-2 justify-between sm:justify-start">
