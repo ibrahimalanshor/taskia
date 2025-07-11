@@ -181,7 +181,7 @@ loadTasks();
     max-screen="lg"
   >
     <base-heading
-      title="Tasks for Today"
+      title="Tasks to Focus On"
       :level="3"
     />
 
@@ -189,7 +189,7 @@ loadTasks();
       v-if="loadingTasks"
       loading
     >
-      Loading Tasks
+      Bringing Up Your Tasks
     </base-alert>
 
     <template v-else>
@@ -197,7 +197,7 @@ loadTasks();
         v-if="errorTasks"
         color="red"
       >
-        Error loading Tasks
+        Something went wrong while loading tasks.
       </base-alert>
       <base-list :data="sortedTasks">
         <template #header="{ classes }">
