@@ -5,7 +5,7 @@ export function guestGuard(to) {
 
   if (to.matched.some((route) => route.meta.guest) && authStore.loggedIn) {
     return {
-      name: 'home',
+      name: 'focus',
     };
   }
 }

@@ -9,8 +9,8 @@ const route = useRoute();
 const visibleLogout = ref(false);
 
 const menus = [
-  { id: 'home', name: 'Home', to: { name: 'home' } },
-  { id: 'backlog', name: 'Backlog', to: { name: 'home' } },
+  { id: 'focus', name: 'Focus', to: { name: 'focus' } },
+  { id: 'backlog', name: 'Backlog', to: { name: 'focus' } },
 ];
 </script>
 

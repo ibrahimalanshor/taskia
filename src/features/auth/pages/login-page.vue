@@ -36,7 +36,7 @@ async function onGoogleLogin() {
   } else {
     authStore.login(res.accessToken);
 
-    router.push({ name: 'home' });
+    router.push({ name: 'focus' });
   }
 
   loadingGoogleLogin.value = false;

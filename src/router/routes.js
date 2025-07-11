@@ -1,4 +1,4 @@
-import { homeRoutes } from 'src/features/home/home.routes';
+import { focusRoutes } from 'src/features/focus/focus.routes';
 import { authRoutes } from 'src/features/auth/auth.routes';
 
-export const routes = [...homeRoutes, ...authRoutes];
+export const routes = [...focusRoutes, ...authRoutes];
