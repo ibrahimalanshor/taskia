@@ -10,7 +10,7 @@ const visibleLogout = ref(false);
 
 const menus = [
   { id: 'focus', name: 'Focus', to: { name: 'focus' } },
-  { id: 'backlog', name: 'Backlog', to: { name: 'focus' } },
+  { id: 'backlog', name: 'Backlog', to: { name: 'backlog' } },
 ];
 </script>
 
